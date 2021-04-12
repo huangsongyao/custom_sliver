@@ -3,6 +3,7 @@ import 'package:custom_sliver/custom_sliver_configs.dart';
 import 'package:custom_sliver/custom_sliver_enum.dart';
 import 'package:custom_sliver/custom_sliver_refresh.dart';
 import 'package:custom_tab_bar/custom_tab_bar.dart';
+import 'package:custom_tab_bar/custom_tab_configs.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as HSY;
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
       );
     }
     assert(
-      this.widget.customSliverConfigs == null,
+      this.widget.customSliverConfigs != null,
       '数据配置及相关内容不能为null',
     );
   }
@@ -91,7 +92,9 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
       initialIndex: _selectedIndex,
       length: this.widget.customSliverConfigs.tabDatas.length,
       vsync: this,
-    );
+    )..addListener(() {
+        _selectedIndex = _tabController.index;
+      });
     _positionKeys = this.widget.customSliverConfigs.tabDatas.map((tabData) {
       return Key(
           '$_HSYCustomSliverKeyPrefix.${this.widget.customSliverConfigs.tabDatas.indexOf(tabData)}');
@@ -117,18 +120,22 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
       sliverHeaders: (this.widget.sliverHeaders ?? Container()),
       persistentHeaderHeights: this.widget.tabHeights,
       persistentHeader: HSYCustomTabBar(
+        initTabBarConfigs: this.widget.customSliverConfigs.tabBarConfigs,
         backgroundDecoration: this.widget.backgroundDecoration,
         initSelectedIndex: _selectedIndex,
         tabHeights: this.widget.tabHeights,
         tabController: _tabController,
+        onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
+          _selectedIndex = _tabController.index;
+        },
       ),
       nestedBody: TabBarView(
         controller: _tabController,
-        children: (this.widget.customSliverConfigs.tabDatas.isNotEmpty
-            ? this.widget.customSliverConfigs.tabDatas.map((datas) {
-                final int pages =
-                    this.widget.customSliverConfigs.tabDatas.indexOf(datas);
-                return HSY.NestedScrollViewInnerScrollPositionKeyWidget(
+        children: this.widget.customSliverConfigs.tabDatas.map((datas) {
+          final int pages =
+              this.widget.customSliverConfigs.tabDatas.indexOf(datas);
+          return (datas.pageDatas.isNotEmpty
+              ? HSY.NestedScrollViewInnerScrollPositionKeyWidget(
                   _positionKeys[pages],
                   SmartRefresher(
                     controller: _refreshControllers[pages],
@@ -164,9 +171,12 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
                           : []),
                     ),
                   ),
-                );
-              }).toList()
-            : (this.widget.empty ?? HSYCustomSlverEmpty())),
+                )
+              : (this.widget.empty ??
+                  HSYCustomSliverEmpty(
+                    reqResult: HSYSliverRefreshResult.NotData,
+                  )));
+        }).toList(),
       ),
       onChanged: (HYSCustomSliverScrollStatus status, num offsets) {},
     );

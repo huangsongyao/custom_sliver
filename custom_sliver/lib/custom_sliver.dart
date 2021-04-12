@@ -5,11 +5,13 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 
 typedef HSYCustomSliverScrollChanged = void Function(
     HYSCustomSliverScrollStatus status, num offsets);
+typedef HSYCustomSliverEdgeInsert = void Function(HYSCustomSliverScrollStatus status);
 
 class HSYCustomSliverView extends StatefulWidget {
   final List<Widget> sliverHeaders;
   final double persistentHeaderHeights;
   final HSYCustomSliverScrollChanged onChanged;
+  final HSYCustomSliverEdgeInsert onEdInserts;
   final Widget persistentHeader;
   final List<Key> positionKeys;
   final Widget nestedBody;
@@ -21,6 +23,7 @@ class HSYCustomSliverView extends StatefulWidget {
     this.positionKeys = const [],
     this.sliverHeaders,
     this.nestedBody,
+    this.onEdInserts,
     this.onChanged,
   }) : super(key: key);
 
@@ -37,14 +40,17 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
     super.initState();
     _scrollController = ScrollController()
       ..addListener(() {
-        HYSCustomSliverScrollStatus status =
-            HYSCustomSliverScrollStatus.InSlivers;
-        if (_scrollController.offset ==
-            _scrollController.position.minScrollExtent) {
-          status = HYSCustomSliverScrollStatus.InSliverTops;
-        } else if (_scrollController.offset ==
-            _scrollController.position.maxScrollExtent) {
-          status = HYSCustomSliverScrollStatus.InSliverBottoms;
+        if (this.widget.onEdInserts != null) {
+          HYSCustomSliverScrollStatus status =
+              HYSCustomSliverScrollStatus.InSlivers;
+          if (_scrollController.offset ==
+              _scrollController.position.minScrollExtent) {
+            status = HYSCustomSliverScrollStatus.InSliverTops;
+          } else if (_scrollController.offset ==
+              _scrollController.position.maxScrollExtent) {
+            status = HYSCustomSliverScrollStatus.InSliverBottoms;
+          }
+          this.widget.onEdInserts(status);
         }
       });
   }

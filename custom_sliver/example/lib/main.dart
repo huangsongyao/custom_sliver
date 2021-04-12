@@ -1,3 +1,8 @@
+import 'dart:math';
+
+import 'package:custom_sliver/custom_sliver_configs.dart';
+import 'package:custom_tab_bar/custom_tab_configs.dart';
+import 'package:custom_sliver/custom_sliver_tab_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -26,92 +31,146 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: TestCustomTabBar2(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+class TestCustomTabBar2 extends StatefulWidget {
   final String title;
 
+  TestCustomTabBar2({
+    Key key,
+    this.title,
+  }) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _TestCustomTabBar2State createState() => _TestCustomTabBar2State();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _TestCustomTabBar2State extends State<TestCustomTabBar2>
+    with TickerProviderStateMixin {
+  TabController _tabController;
+  List<HSYCustomTabBarItemConfigs> _configs;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _configs = [
+      HSYCustomTabBarItemConfigs(text: '已入金'),
+      HSYCustomTabBarItemConfigs(text: '已注册'),
+      HSYCustomTabBarItemConfigs(text: '已交易'),
+      HSYCustomTabBarItemConfigs(text: '已认证'),
+      HSYCustomTabBarItemConfigs(text: '已理财'),
+      HSYCustomTabBarItemConfigs(text: '已登录')
+    ];
+    _tabController = TabController(
+      length: _configs.length,
+      vsync: this,
+    )..addListener(() {
+        print(
+            '------------_tabController.index=${_tabController.index}---------');
+      });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final datas = [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+      '13',
+      '14',
+      '15',
+      '16',
+      '17',
+      '18',
+      '19',
+    ];
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      body: HSYCustomSliverTabView(
+        customSliverConfigs: HSYCustomSliverConfigs(
+          tabBarConfigs: HSYCustomTabBarConfigs(
+            itemConfigs: _configs,
+            indicatorConfig:
+                HSYCustomTabBarIndicatorConfig.indicator3(Size(24.0, 2.0)),
+          ),
+          tabBarDatas: _configs.map((tab) {
+            return HSYCustomSliverDatas(
+              tabPageDatas: (_configs.indexOf(tab) == 1 ? [] : datas.map((index) {
+                return (int.tryParse(index) + Random().nextInt(100));
+              }).toList()),
+            );
+          }).toList(),
         ),
+        openUpRefresh: false,
+        onBuilder: (dynamic item, int index, int pages) {
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 15.0),
+            alignment: Alignment.center,
+            child: Text('$index-$item'),
+          );
+        },
+        sliverHeaders: [
+          Container(
+            color: Colors.black,
+            height: 100,
+          ),
+          Container(
+            color: Colors.black26,
+            height: 100,
+          ),
+          Container(
+            color: Colors.cyanAccent,
+            height: 100,
+          ),
+          Container(
+            color: Colors.cyan,
+            height: 100,
+          ),
+          Container(
+            color: Colors.amber,
+            height: 100,
+          ),
+          Container(
+            color: Colors.black38,
+            height: 100,
+          ),
+          Container(
+            color: Colors.blue,
+            height: 100,
+          ),
+          Container(
+            color: Colors.deepOrange,
+            height: 100,
+          ),
+          Container(
+            color: Colors.black,
+            height: 100,
+          ),
+          Container(
+            color: Colors.greenAccent,
+            height: 100,
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
