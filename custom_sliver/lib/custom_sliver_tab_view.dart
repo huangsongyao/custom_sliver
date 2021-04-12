@@ -16,7 +16,7 @@ typedef HSYCustomSliverRefreshResult = void Function(
     HSYSliverRefreshResult result);
 typedef HSYCustomSliverRefresh = void Function(
     int pages, HSYCustomSliverRefreshResult result);
-typedef HSYCustomTabChanged = void Function(
+typedef HSYCustomNestedTabChanged = void Function(
     int index, HSYCustomTabBarItemConfigs itemConfigs, bool isClickedTabBar);
 
 const String _HSYCustomSliverKeyPrefix = 'HSYCustomSliverKeyPrefix';
@@ -44,7 +44,7 @@ class HSYCustomSliverTabView extends StatefulWidget {
   final HSYCustomSliverRefresh onLoading;
 
   /// 点击TabBar或者滑动TabBarView的切换事件
-  final HSYCustomTabChanged onChanged;
+  final HSYCustomNestedTabChanged onChanged;
 
   /// 组合组件的头部
   final List<Widget> sliverHeaders;
@@ -160,6 +160,10 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
   @override
   Widget build(BuildContext context) {
     return HSYCustomSliverView(
+      positionKeys: _positionKeys,
+      onTabChanged: (List<Key> positionKeys) {
+        return positionKeys[_selectedIndex];
+      },
       sliverHeaders: (this.widget.sliverHeaders ?? Container()),
       persistentHeaderHeights: this.widget.tabHeights,
       persistentHeader: Column(

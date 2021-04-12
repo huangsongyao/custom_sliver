@@ -5,6 +5,8 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 
 typedef HSYCustomSliverScrollChanged = void Function(
     HYSCustomSliverScrollStatus status, num offsets);
+typedef HSYCustomSliverPositionKeyBuilder = Key Function(
+    List<Key> positionKeys);
 
 class HSYCustomSliverView extends StatefulWidget {
   /// 组合组件的头部
@@ -15,6 +17,9 @@ class HSYCustomSliverView extends StatefulWidget {
 
   /// 监听整个组合组件的滚动位置
   final HSYCustomSliverScrollChanged onSliverChanged;
+
+  /// 反向监听切换tab的动作，用于内部报错列表的状态
+  final HSYCustomSliverPositionKeyBuilder onTabChanged;
 
   /// 组合组件的悬浮部件
   final Widget persistentHeader;
@@ -32,6 +37,7 @@ class HSYCustomSliverView extends StatefulWidget {
     this.positionKeys = const [],
     this.onSliverChanged,
     this.sliverHeaders,
+    this.onTabChanged,
     this.nestedBody,
   }) : super(key: key);
 
@@ -74,11 +80,13 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
   Widget build(BuildContext context) {
     return HSY.NestedScrollView(
       controller: _scrollController,
-      innerScrollPositionKeyBuilder: (this.widget.positionKeys.isNotEmpty
-          ? () {
-              return this.widget.positionKeys.first;
-            }
-          : null),
+      innerScrollPositionKeyBuilder: () {
+        if (this.widget.onTabChanged != null &&
+            this.widget.positionKeys.isNotEmpty) {
+          return this.widget.onTabChanged(this.widget.positionKeys);
+        }
+        return Key('None');
+      },
       pinnedHeaderSliverHeightBuilder: () {
         return this.widget.persistentHeaderHeights;
       },
