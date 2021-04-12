@@ -1,7 +1,7 @@
 name: custom_sliver
 description: A new Flutter package.
 version: 0.0.1
-homepage:
+homepage: https://github.com/huangsongyao/custom_sliver
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -33,7 +33,8 @@ flutter:
   uses-material-design: true
   # To add assets to your package, add an assets section, like this:
   assets:
-    - assets/
+    - assets/img_no_network.png
+    - assets/img_no_records.png
 
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

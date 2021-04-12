@@ -1,5 +1,6 @@
 import 'package:custom_sliver/custom_sliver.dart';
 import 'package:custom_sliver/custom_sliver_configs.dart';
+import 'package:custom_sliver/custom_sliver_devices.dart';
 import 'package:custom_sliver/custom_sliver_enum.dart';
 import 'package:custom_sliver/custom_sliver_refresh.dart';
 import 'package:custom_tab_bar/custom_tab_bar.dart';
@@ -15,6 +16,8 @@ typedef HSYCustomSliverRefreshResult = void Function(
     HSYSliverRefreshResult result);
 typedef HSYCustomSliverRefresh = void Function(
     int pages, HSYCustomSliverRefreshResult result);
+typedef HSYCustomTabChanged = void Function(
+    int index, HSYCustomTabBarItemConfigs itemConfigs, bool isClickedTabBar);
 
 const String _HSYCustomSliverKeyPrefix = 'HSYCustomSliverKeyPrefix';
 
@@ -22,10 +25,11 @@ class HSYCustomSliverTabView extends StatefulWidget {
   final int initSelectedIndex;
   final BoxDecoration backgroundDecoration;
   final HSYCustomSliverConfigs customSliverConfigs;
-  final HSYCustomTabBarChangedItem onChanged;
+  final HSYCustomSliverScrollChanged onSliverChanged;
   final HSYCustomSliverBuilder onBuilder;
   final HSYCustomSliverRefresh onRefresh;
   final HSYCustomSliverRefresh onLoading;
+  final HSYCustomTabChanged onChanged;
   final List<Widget> sliverHeaders;
   final Widget refreshHeader;
   final Widget refreshFooter;
@@ -45,6 +49,7 @@ class HSYCustomSliverTabView extends StatefulWidget {
     this.sliverHeaders,
     this.refreshHeader,
     this.refreshFooter,
+    this.onSliverChanged,
     this.onChanged,
     this.onBuilder,
     this.onRefresh,
@@ -94,6 +99,15 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
       vsync: this,
     )..addListener(() {
         _selectedIndex = _tabController.index;
+        _onChangedPage(
+          _selectedIndex,
+          this
+              .widget
+              .customSliverConfigs
+              .tabBarConfigs
+              .tabBarItemConfigs[_selectedIndex],
+          false,
+        );
       });
     _positionKeys = this.widget.customSliverConfigs.tabDatas.map((tabData) {
       return Key(
@@ -127,6 +141,10 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
         tabController: _tabController,
         onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
           _selectedIndex = _tabController.index;
+          _onChangedPage(
+            index,
+            itemConfigs,
+          );
         },
       ),
       nestedBody: TabBarView(
@@ -134,51 +152,57 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
         children: this.widget.customSliverConfigs.tabDatas.map((datas) {
           final int pages =
               this.widget.customSliverConfigs.tabDatas.indexOf(datas);
-          return (datas.pageDatas.isNotEmpty
-              ? HSY.NestedScrollViewInnerScrollPositionKeyWidget(
-                  _positionKeys[pages],
-                  SmartRefresher(
-                    controller: _refreshControllers[pages],
-                    enablePullDown: this.widget.openDownRefresh,
-                    enablePullUp: this.widget.openUpRefresh,
-                    header: CustomHeader(
-                      builder: (BuildContext context, RefreshStatus mode) {
-                        return (this.widget.refreshHeader ??
-                            HSYCustomSliverHeaderRefresh());
-                      },
-                    ),
-                    footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus mode) {
-                        return (this.widget.refreshFooter ??
-                            HSYCustomSliverFooterRefresh());
-                      },
-                    ),
-                    onRefresh: () {
-                      _onRefresh(pages);
-                    },
-                    onLoading: () {
-                      _onLoading(pages);
-                    },
-                    child: ListView(
-                      children: (this.widget.onBuilder != null
-                          ? datas.pageDatas.map((item) {
-                              return this.widget.onBuilder(
-                                    item,
-                                    datas.pageDatas.indexOf(item),
-                                    pages,
-                                  );
-                            }).toList()
-                          : []),
-                    ),
-                  ),
-                )
+          final List<Widget> children = (datas.pageDatas.isNotEmpty
+              ? (this.widget.onBuilder != null
+                  ? datas.pageDatas.map((item) {
+                      return this.widget.onBuilder(
+                            item,
+                            datas.pageDatas.indexOf(item),
+                            pages,
+                          );
+                    }).toList()
+                  : [])
               : (this.widget.empty ??
-                  HSYCustomSliverEmpty(
-                    reqResult: HSYSliverRefreshResult.NotData,
-                  )));
+                  [
+                    HSYCustomSliverEmpty(
+                      reqResult: HSYSliverRefreshResult.NotData,
+                    ),
+                  ]));
+          if (HSYDevicesStatus.hasBottomsPadding(context)) {
+            children.add(HSYIosBottomSafeWidget());
+          }
+          return HSY.NestedScrollViewInnerScrollPositionKeyWidget(
+            _positionKeys[pages],
+            SmartRefresher(
+              controller: _refreshControllers[pages],
+              enablePullDown: this.widget.openDownRefresh,
+              enablePullUp: this.widget.openUpRefresh,
+              header: CustomHeader(
+                builder: (BuildContext context, RefreshStatus mode) {
+                  return (this.widget.refreshHeader ??
+                      HSYCustomSliverHeaderRefresh());
+                },
+              ),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus mode) {
+                  return (this.widget.refreshFooter ??
+                      HSYCustomSliverFooterRefresh());
+                },
+              ),
+              onRefresh: () {
+                _onRefresh(pages);
+              },
+              onLoading: () {
+                _onLoading(pages);
+              },
+              child: ListView(
+                children: children,
+              ),
+            ),
+          );
         }).toList(),
       ),
-      onChanged: (HYSCustomSliverScrollStatus status, num offsets) {},
+      onSliverChanged: this.widget.onSliverChanged,
     );
   }
 
@@ -220,5 +244,19 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
         }
       },
     );
+  }
+
+  void _onChangedPage(
+    int index,
+    HSYCustomTabBarItemConfigs itemConfigs, [
+    bool isClickedTabBar = true,
+  ]) {
+    if (this.widget.onChanged != null) {
+      this.widget.onChanged(
+            index,
+            itemConfigs,
+            isClickedTabBar,
+          );
+    }
   }
 }

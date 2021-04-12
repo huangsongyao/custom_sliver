@@ -35,9 +35,11 @@ class HSYCustomSliverFooterRefresh extends StatelessWidget {
 }
 
 class HSYCustomSliverEmpty extends StatelessWidget {
+  final double tabHeights;
   final HSYSliverRefreshResult reqResult;
 
   HSYCustomSliverEmpty({
+    this.tabHeights = kToolbarHeight,
     this.reqResult = HSYSliverRefreshResult.NotData,
   });
 
@@ -56,7 +58,10 @@ class HSYCustomSliverEmpty extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: ((image ?? '').isEmpty
           ? Container(
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery.of(context).size.height -
+                  (MediaQuery.of(context).padding.top +
+                      kToolbarHeight +
+                      this.tabHeights),
             )
           : Column(
               children: [
@@ -64,6 +69,7 @@ class HSYCustomSliverEmpty extends StatelessWidget {
                   image,
                   width: 100.0,
                   height: 100.0,
+                  package: 'custom_sliver',
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 35.0),
