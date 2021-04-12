@@ -239,7 +239,11 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
           );
         }).toList(),
       ),
-      onSliverChanged: this.widget.onSliverChanged,
+      onSliverChanged: (HYSCustomSliverScrollStatus status, num offsets) {
+        if (this.widget.onSliverChanged != null) {
+          this.widget.onSliverChanged(status, offsets);
+        }
+      },
     );
   }
 
