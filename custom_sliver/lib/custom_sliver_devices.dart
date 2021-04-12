@@ -15,6 +15,7 @@ abstract class HSYDevicesStatus {
 }
 
 class HSYIosBottomSafeWidget extends StatelessWidget {
+  /// 兼容iPhone刘海屏底部的上滑区域
   final Color color;
 
   HSYIosBottomSafeWidget({

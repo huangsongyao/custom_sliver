@@ -7,11 +7,22 @@ typedef HSYCustomSliverScrollChanged = void Function(
     HYSCustomSliverScrollStatus status, num offsets);
 
 class HSYCustomSliverView extends StatefulWidget {
+  /// 组合组件的头部
   final List<Widget> sliverHeaders;
+
+  /// 组合组件的悬浮部件的高度
   final double persistentHeaderHeights;
+
+  /// 监听整个组合组件的滚动位置
   final HSYCustomSliverScrollChanged onSliverChanged;
+
+  /// 组合组件的悬浮部件
   final Widget persistentHeader;
+
+  /// 组合组件的keys
   final List<Key> positionKeys;
+
+  /// 组合组件的body组件
   final Widget nestedBody;
 
   HSYCustomSliverView({
@@ -100,7 +111,10 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
 
 class _HSYCustomSliverPersistentHeaderDelegate
     extends SliverPersistentHeaderDelegate {
+  /// 自定义悬浮组件的协议的内容小部件
   final Widget child;
+
+  /// 自定义悬浮组件的协议的悬浮高度
   final double persistentHeaderHeights;
 
   _HSYCustomSliverPersistentHeaderDelegate({

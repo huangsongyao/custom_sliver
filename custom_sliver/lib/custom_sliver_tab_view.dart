@@ -22,30 +22,59 @@ typedef HSYCustomTabChanged = void Function(
 const String _HSYCustomSliverKeyPrefix = 'HSYCustomSliverKeyPrefix';
 
 class HSYCustomSliverTabView extends StatefulWidget {
+  /// 初始选中的tab位置
   final int initSelectedIndex;
-  final BoxDecoration backgroundDecoration;
+
+  /// 自定义tabBar的背景色
+  final BoxDecoration tabBarBackground;
+
+  /// 整个组合组件的数据源
   final HSYCustomSliverConfigs customSliverConfigs;
+
+  /// 组合组件的滚动状态监听
   final HSYCustomSliverScrollChanged onSliverChanged;
+
+  /// 外部通过这个builder来创建每个page中的小部件
   final HSYCustomSliverBuilder onBuilder;
+
+  /// 下拉刷新事件
   final HSYCustomSliverRefresh onRefresh;
+
+  /// 上拉加载更多事件
   final HSYCustomSliverRefresh onLoading;
+
+  /// 点击TabBar或者滑动TabBarView的切换事件
   final HSYCustomTabChanged onChanged;
+
+  /// 组合组件的头部
   final List<Widget> sliverHeaders;
+
+  /// 下拉刷新的头部
   final Widget refreshHeader;
+
+  /// 上拉加载更多的底部
   final Widget refreshFooter;
+
+  /// 是否添加下拉刷新
   final bool openDownRefresh;
+
+  /// 是否添加上拉加载更多
   final bool openUpRefresh;
+
+  /// TabBar的高度，默认为kToolbarHeight
   final double tabHeights;
+
+  /// page为空数据时的占位小部件
   final Widget empty;
 
   HSYCustomSliverTabView({
     Key key,
     @required this.customSliverConfigs,
-    this.backgroundDecoration,
     this.initSelectedIndex = 0,
     this.tabHeights = kToolbarHeight,
     this.openDownRefresh = false,
     this.openUpRefresh = true,
+    this.tabBarBackground,
     this.sliverHeaders,
     this.refreshHeader,
     this.refreshFooter,
@@ -95,7 +124,7 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
     _selectedIndex = (this.widget.initSelectedIndex ?? 0);
     _tabController = TabController(
       initialIndex: _selectedIndex,
-      length: this.widget.customSliverConfigs.tabDatas.length,
+      length: this.widget.customSliverConfigs.pagesDatas.length,
       vsync: this,
     )..addListener(() {
         _selectedIndex = _tabController.index;
@@ -109,9 +138,9 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
           false,
         );
       });
-    _positionKeys = this.widget.customSliverConfigs.tabDatas.map((tabData) {
+    _positionKeys = this.widget.customSliverConfigs.pagesDatas.map((tabData) {
       return Key(
-          '$_HSYCustomSliverKeyPrefix.${this.widget.customSliverConfigs.tabDatas.indexOf(tabData)}');
+          '$_HSYCustomSliverKeyPrefix.${this.widget.customSliverConfigs.pagesDatas.indexOf(tabData)}');
     }).toList();
     _refreshControllers = _positionKeys.map((key) {
       return RefreshController();
@@ -133,25 +162,29 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
     return HSYCustomSliverView(
       sliverHeaders: (this.widget.sliverHeaders ?? Container()),
       persistentHeaderHeights: this.widget.tabHeights,
-      persistentHeader: HSYCustomTabBar(
-        initTabBarConfigs: this.widget.customSliverConfigs.tabBarConfigs,
-        backgroundDecoration: this.widget.backgroundDecoration,
-        initSelectedIndex: _selectedIndex,
-        tabHeights: this.widget.tabHeights,
-        tabController: _tabController,
-        onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
-          _selectedIndex = _tabController.index;
-          _onChangedPage(
-            index,
-            itemConfigs,
-          );
-        },
+      persistentHeader: Column(
+        children: [
+          HSYCustomTabBar(
+            initTabBarConfigs: this.widget.customSliverConfigs.tabBarConfigs,
+            backgroundDecoration: this.widget.tabBarBackground,
+            tabHeights: this.widget.tabHeights,
+            initSelectedIndex: _selectedIndex,
+            tabController: _tabController,
+            onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
+              _selectedIndex = _tabController.index;
+              _onChangedPage(
+                index,
+                itemConfigs,
+              );
+            },
+          )
+        ],
       ),
       nestedBody: TabBarView(
         controller: _tabController,
-        children: this.widget.customSliverConfigs.tabDatas.map((datas) {
+        children: this.widget.customSliverConfigs.pagesDatas.map((datas) {
           final int pages =
-              this.widget.customSliverConfigs.tabDatas.indexOf(datas);
+              this.widget.customSliverConfigs.pagesDatas.indexOf(datas);
           final List<Widget> children = (datas.pageDatas.isNotEmpty
               ? (this.widget.onBuilder != null
                   ? datas.pageDatas.map((item) {

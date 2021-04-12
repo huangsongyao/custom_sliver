@@ -112,11 +112,13 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
             indicatorConfig:
                 HSYCustomTabBarIndicatorConfig.indicator3(Size(24.0, 2.0)),
           ),
-          tabBarDatas: _configs.map((tab) {
+          tabPageDatas: _configs.map((tab) {
             return HSYCustomSliverDatas(
-              tabPageDatas: (_configs.indexOf(tab) == 1 ? [] : datas.map((index) {
-                return (int.tryParse(index) + Random().nextInt(100));
-              }).toList()),
+              datas: (_configs.indexOf(tab) == 1
+                  ? []
+                  : datas.map((index) {
+                      return (int.tryParse(index) + Random().nextInt(100));
+                    }).toList()),
             );
           }).toList(),
         ),

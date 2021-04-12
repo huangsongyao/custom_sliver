@@ -9,6 +9,7 @@ class HSYCustomSliverHeaderRefresh extends StatelessWidget {
 }
 
 class HSYCustomSliverFooterRefresh extends StatelessWidget {
+  /// 外部自定义text
   final Widget text;
 
   HSYCustomSliverFooterRefresh({
@@ -35,31 +36,43 @@ class HSYCustomSliverFooterRefresh extends StatelessWidget {
 }
 
 class HSYCustomSliverEmpty extends StatelessWidget {
+  /// 悬浮组件的高度，既TabBar的高度
   final double tabHeights;
+
+  /// 上拉加载更多的结果
   final HSYSliverRefreshResult reqResult;
+
+  /// 占位图图片信息
+  final Map<HSYSliverRefreshResult, String> images;
+
+  /// 占位文字信息
+  final Map<HSYSliverRefreshResult, String> texts;
 
   HSYCustomSliverEmpty({
     this.tabHeights = kToolbarHeight,
     this.reqResult = HSYSliverRefreshResult.NotData,
+    this.images = const {
+      HSYSliverRefreshResult.Failure: 'assets/img_no_network.png',
+      HSYSliverRefreshResult.NotData: 'assets/img_no_records.png',
+    },
+    this.texts = const {
+      HSYSliverRefreshResult.Failure: 'Request Failure',
+      HSYSliverRefreshResult.NotData: 'No Records',
+    },
   });
 
   @override
   Widget build(BuildContext context) {
-    final String image = {
-      HSYSliverRefreshResult.Failure: 'assets/img_no_network.png',
-      HSYSliverRefreshResult.NotData: 'assets/img_no_records.png',
-    }[this.reqResult];
-    final String text = {
-      HSYSliverRefreshResult.Failure: 'Request Failure',
-      HSYSliverRefreshResult.NotData: 'No Records',
-    }[this.reqResult];
+    final String image = this.images[this.reqResult];
+    final String text = this.texts[this.reqResult];
     return Container(
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 200.0),
       child: ((image ?? '').isEmpty
           ? Container(
               height: MediaQuery.of(context).size.height -
-                  (MediaQuery.of(context).padding.top +
+                  ((MediaQuery.of(context).padding.top * 2.0) +
                       kToolbarHeight +
                       this.tabHeights),
             )
@@ -72,7 +85,7 @@ class HSYCustomSliverEmpty extends StatelessWidget {
                   package: 'custom_sliver',
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 35.0),
+                  margin: EdgeInsets.only(top: 35.0),
                   child: Text(
                     text,
                     style: TextStyle(
