@@ -60,8 +60,8 @@ class HSYCustomSliverTabView extends StatefulWidget {
   /// 是否添加下拉刷新
   final bool openDownRefresh;
 
-  /// 是否添加上拉加载更多
-  final bool openUpRefresh;
+  /// 是否添加上拉加载更多，这个是一个外部控制的bool集合，元素对应了每个page
+  final List<bool> openUpRefreshs;
 
   /// TabBar的高度，默认为kToolbarHeight
   final double tabHeights;
@@ -75,8 +75,8 @@ class HSYCustomSliverTabView extends StatefulWidget {
     this.initSelectedIndex = 0,
     this.tabHeights = kToolbarHeight,
     this.openDownRefresh = false,
-    this.openUpRefresh = true,
     this.tabBarBackground,
+    this.openUpRefreshs,
     this.sliverHeaders,
     this.refreshHeader,
     this.refreshFooter,
@@ -106,7 +106,7 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
         '如果支持下拉刷新操作，则下拉请求事件不能为null',
       );
     }
-    if (this.widget.openUpRefresh) {
+    if ((this.widget.openUpRefreshs ?? []).isNotEmpty) {
       assert(
         this.widget.onLoading != null,
         '如果支持上拉加载更多操作，则上拉请求事件不能为null',
@@ -214,7 +214,7 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
             _positionKeys[pages],
             SmartRefresher(
               enablePullDown: false,
-              enablePullUp: this.widget.openUpRefresh,
+              enablePullUp: this.widget.openUpRefreshs[pages],
               controller: _refreshControllers[pages],
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus mode) {

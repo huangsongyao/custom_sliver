@@ -104,7 +104,9 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
       ),
       body: HSYCustomSliverTabView(
         customSliverConfigs: _sliverConfigs,
-        openUpRefresh: true,
+        openUpRefreshs: _sliverConfigs.pagesDatas
+            .map((datas) => datas.pageDatas.isNotEmpty)
+            .toList(),
         onLoading: (int pages, HSYCustomSliverRefreshResult result) {
           Future.delayed(
             Duration(seconds: 2),
