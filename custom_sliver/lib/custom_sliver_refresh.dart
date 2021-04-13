@@ -63,18 +63,20 @@ class HSYCustomSliverEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String image = this.images[this.reqResult];
     final String text = this.texts[this.reqResult];
+    final String image = this.images[this.reqResult];
+    final num contentHeights = HSYCustomSliverEmpty.contentHeights(
+      context,
+      this.tabHeights,
+    );
     return Container(
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
-      margin: EdgeInsets.symmetric(horizontal: 16.0).copyWith(top: 200.0),
+      margin: EdgeInsets.symmetric(horizontal: 16.0)
+          .copyWith(top: ((contentHeights - 190.0) / 2.0)),
       child: ((image ?? '').isEmpty
           ? Container(
-              height: MediaQuery.of(context).size.height -
-                  ((MediaQuery.of(context).padding.top * 2.0) +
-                      kToolbarHeight +
-                      this.tabHeights),
+              height: contentHeights,
             )
           : Column(
               children: [
@@ -98,5 +100,15 @@ class HSYCustomSliverEmpty extends StatelessWidget {
               ],
             )),
     );
+  }
+
+  static num contentHeights(
+    BuildContext context, [
+    num tabHeights = kToolbarHeight,
+  ]) {
+    return MediaQuery.of(context).size.height -
+        ((MediaQuery.of(context).padding.top * 2.0) +
+            kToolbarHeight +
+            tabHeights);
   }
 }

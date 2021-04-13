@@ -113,7 +113,6 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
       },
       body: this.widget.nestedBody,
     );
-    ;
   }
 }
 
