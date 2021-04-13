@@ -19,6 +19,28 @@ class HSYCustomSliverConfigs {
   List<HSYCustomSliverDatas> get pagesDatas {
     return (this.tabPageDatas ?? []);
   }
+
+  void updateSliverDatas(
+    int pages,
+    List<dynamic> news, [
+    bool isLoading = false,
+  ]) {
+    HSYCustomSliverDatas newDatas = HSYCustomSliverDatas.defaults(news);
+    if (isLoading) {
+      final HSYCustomSliverDatas sliverDatas = this.pagesDatas[pages];
+      newDatas.pageDatas.forEach((element) {
+        sliverDatas.pageDatas.add(element);
+      });
+      newDatas = sliverDatas;
+    }
+    if (newDatas.pageDatas.isNotEmpty) {
+      this.tabPageDatas.replaceRange(
+        pages,
+        (pages + 1),
+        [newDatas],
+      );
+    }
+  }
 }
 
 class HSYCustomSliverDatas {

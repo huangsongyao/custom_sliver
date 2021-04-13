@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:custom_sliver/custom_sliver_configs.dart';
+import 'package:custom_sliver/custom_sliver_enum.dart';
 import 'package:custom_tab_bar/custom_tab_configs.dart';
 import 'package:custom_sliver/custom_sliver_tab_view.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
     with TickerProviderStateMixin {
   TabController _tabController;
   List<HSYCustomTabBarItemConfigs> _configs;
+  HSYCustomSliverConfigs _sliverConfigs;
 
   @override
   void initState() {
@@ -73,32 +75,27 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
         print(
             '------------_tabController.index=${_tabController.index}---------');
       });
+
+    _sliverConfigs = HSYCustomSliverConfigs(
+      tabBarConfigs: HSYCustomTabBarConfigs(
+        itemConfigs: _configs,
+        indicatorConfig:
+            HSYCustomTabBarIndicatorConfig.indicator3(Size(24.0, 2.0)),
+      ),
+      tabPageDatas: _configs.map((tab) {
+        return HSYCustomSliverDatas(
+          datas: (_configs.indexOf(tab) == 1
+              ? []
+              : _datas().map((index) {
+                  return (int.tryParse(index) + Random().nextInt(100));
+                }).toList()),
+        );
+      }).toList(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final datas = [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '7',
-      '8',
-      '9',
-      '10',
-      '11',
-      '12',
-      '13',
-      '14',
-      '15',
-      '16',
-      '17',
-      '18',
-      '19',
-    ];
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -106,23 +103,42 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
         title: Text(widget.title),
       ),
       body: HSYCustomSliverTabView(
-        customSliverConfigs: HSYCustomSliverConfigs(
-          tabBarConfigs: HSYCustomTabBarConfigs(
-            itemConfigs: _configs,
-            indicatorConfig:
-                HSYCustomTabBarIndicatorConfig.indicator3(Size(24.0, 2.0)),
-          ),
-          tabPageDatas: _configs.map((tab) {
-            return HSYCustomSliverDatas(
-              datas: (_configs.indexOf(tab) == 1
-                  ? []
-                  : datas.map((index) {
-                      return (int.tryParse(index) + Random().nextInt(100));
-                    }).toList()),
-            );
-          }).toList(),
-        ),
-        openUpRefresh: false,
+        customSliverConfigs: _sliverConfigs,
+        openUpRefresh: true,
+        onLoading: (int pages, HSYCustomSliverRefreshResult result) {
+          Future.delayed(
+            Duration(seconds: 2),
+            () {
+              final nexts = _datas().map((index) {
+                return (int.tryParse(index) + Random().nextInt(100));
+              }).toList();
+              _sliverConfigs.updateSliverDatas(
+                pages,
+                nexts,
+                true,
+              );
+              result(HSYSliverRefreshResult.Completed);
+              setState(() {});
+            },
+          );
+        },
+        openDownRefresh: true,
+        onRefresh: (int pages, HSYCustomSliverRefreshResult result) {
+          Future.delayed(
+            Duration(seconds: 2),
+            () {
+              final nexts = _datas().map((index) {
+                return (int.tryParse(index) + Random().nextInt(100));
+              }).toList();
+              _sliverConfigs.updateSliverDatas(
+                pages,
+                nexts,
+              );
+              result(HSYSliverRefreshResult.Completed);
+              setState(() {});
+            },
+          );
+        },
         onBuilder: (dynamic item, int index, int pages) {
           return Container(
             margin: EdgeInsets.symmetric(vertical: 15.0),
@@ -174,5 +190,31 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
         ],
       ),
     );
+  }
+
+  List<String> _datas() {
+    final datas = [
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+      '6',
+      '7',
+      '7',
+      '8',
+      '9',
+      '10',
+      '11',
+      '12',
+      '13',
+      '14',
+      '15',
+      '16',
+      '17',
+      '18',
+      '19',
+    ];
+    return datas;
   }
 }

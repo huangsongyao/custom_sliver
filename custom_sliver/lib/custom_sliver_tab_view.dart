@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:custom_sliver/custom_sliver.dart';
 import 'package:custom_sliver/custom_sliver_configs.dart';
 import 'package:custom_sliver/custom_sliver_devices.dart';
@@ -100,13 +102,13 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
   void _asserts() {
     if (this.widget.openDownRefresh) {
       assert(
-        this.widget.onRefresh == null,
+        this.widget.onRefresh != null,
         '如果支持下拉刷新操作，则下拉请求事件不能为null',
       );
     }
     if (this.widget.openUpRefresh) {
       assert(
-        this.widget.onLoading == null,
+        this.widget.onLoading != null,
         '如果支持上拉加载更多操作，则上拉请求事件不能为null',
       );
     }
@@ -211,24 +213,16 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
           return HSY.NestedScrollViewInnerScrollPositionKeyWidget(
             _positionKeys[pages],
             SmartRefresher(
-              controller: _refreshControllers[pages],
-              enablePullDown: this.widget.openDownRefresh,
+              enablePullDown: false,
               enablePullUp: this.widget.openUpRefresh,
-              header: CustomHeader(
-                builder: (BuildContext context, RefreshStatus mode) {
-                  return (this.widget.refreshHeader ??
-                      HSYCustomSliverHeaderRefresh());
-                },
-              ),
+              controller: _refreshControllers[pages],
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus mode) {
-                  return (this.widget.refreshFooter ??
-                      HSYCustomSliverFooterRefresh());
+                  return HSYCustomSliverFooterRefresh(
+                    child: this.widget.refreshFooter,
+                  );
                 },
               ),
-              onRefresh: () {
-                _onRefresh(pages);
-              },
               onLoading: () {
                 _onLoading(pages);
               },
@@ -244,12 +238,19 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
           this.widget.onSliverChanged(status, offsets);
         }
       },
+      onRefresh: (this.widget.openDownRefresh
+          ? () {
+              return _onRefresh(_selectedIndex).stream.first;
+            }
+          : null),
     );
   }
 
-  void _onRefresh([
+  StreamController _onRefresh([
     int pages = 0,
   ]) {
+    StreamController<HSYSliverRefreshResult> streamController =
+        StreamController<HSYSliverRefreshResult>();
     this.widget.onRefresh(
       pages,
       (HSYSliverRefreshResult result) {
@@ -262,8 +263,11 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
             _refreshControllers[pages].refreshCompleted();
             break;
         }
+        streamController.sink.add(result);
+        streamController.close();
       },
     );
+    return streamController;
   }
 
   void _onLoading([

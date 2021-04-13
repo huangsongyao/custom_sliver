@@ -1,4 +1,5 @@
 import 'package:custom_sliver/custom_sliver_enum.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as HSY;
@@ -21,6 +22,9 @@ class HSYCustomSliverView extends StatefulWidget {
   /// 反向监听切换tab的动作，用于内部报错列表的状态
   final HSYCustomSliverPositionKeyBuilder onTabChanged;
 
+  /// 添加下拉刷新
+  final NestedScrollViewRefreshCallback onRefresh;
+
   /// 组合组件的悬浮部件
   final Widget persistentHeader;
 
@@ -39,6 +43,7 @@ class HSYCustomSliverView extends StatefulWidget {
     this.sliverHeaders,
     this.onTabChanged,
     this.nestedBody,
+    this.onRefresh,
   }) : super(key: key);
 
   @override
@@ -64,7 +69,10 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
               _scrollController.position.maxScrollExtent) {
             status = HYSCustomSliverScrollStatus.InSliverBottoms;
           }
-          this.widget.onSliverChanged(status, _scrollController.offset);
+          this.widget.onSliverChanged(
+                status,
+                _scrollController.offset,
+              );
         }
       });
   }
@@ -78,7 +86,7 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
 
   @override
   Widget build(BuildContext context) {
-    return HSY.NestedScrollView(
+    final nestedScrollView = HSY.NestedScrollView(
       controller: _scrollController,
       innerScrollPositionKeyBuilder: () {
         if (this.widget.onTabChanged != null &&
@@ -112,6 +120,13 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
         ];
       },
       body: this.widget.nestedBody,
+    );
+    if (this.widget.onRefresh == null) {
+      return nestedScrollView;
+    }
+    return HSY.NestedScrollViewRefreshIndicator(
+      onRefresh: this.widget.onRefresh,
+      child: nestedScrollView,
     );
   }
 }

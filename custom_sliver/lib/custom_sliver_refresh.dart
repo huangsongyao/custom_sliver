@@ -1,19 +1,13 @@
 import 'package:custom_sliver/custom_sliver_enum.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HSYCustomSliverHeaderRefresh extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
+  /// 外部自定义部件
+  final Widget child;
 
-class HSYCustomSliverFooterRefresh extends StatelessWidget {
-  /// 外部自定义text
-  final Widget text;
-
-  HSYCustomSliverFooterRefresh({
-    this.text,
+  HSYCustomSliverHeaderRefresh({
+    this.child,
   });
 
   @override
@@ -22,7 +16,61 @@ class HSYCustomSliverFooterRefresh extends StatelessWidget {
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
       height: kToolbarHeight,
-      child: (this.text ??
+      child: (this.child ??
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Text(
+                  'Refresh...',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w100,
+                  ),
+                ),
+                margin: EdgeInsets.only(right: 15.0),
+              ),
+              Align(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Theme(
+                    data: ThemeData(
+                      cupertinoOverrideTheme: CupertinoThemeData(
+                        brightness: Brightness.dark,
+                      ),
+                    ),
+                    child: CupertinoActivityIndicator(
+                      radius: 10,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )),
+    );
+  }
+}
+
+class HSYCustomSliverFooterRefresh extends StatelessWidget {
+  /// 外部自定义text
+  final Widget child;
+
+  HSYCustomSliverFooterRefresh({
+    this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      width: MediaQuery.of(context).size.width,
+      height: kToolbarHeight,
+      child: (this.child ??
           Text(
             'Loading...',
             style: TextStyle(
