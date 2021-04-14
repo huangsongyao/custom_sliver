@@ -15,23 +15,13 @@ class HSYCustomSliverHeaderRefresh extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
+      color: Colors.transparent,
       height: kToolbarHeight,
       child: (this.child ??
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                child: Text(
-                  'Refresh...',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w100,
-                  ),
-                ),
-                margin: EdgeInsets.only(right: 15.0),
-              ),
               Align(
                 child: Container(
                   decoration: BoxDecoration(

@@ -1,8 +1,11 @@
 import 'package:custom_sliver/custom_sliver_enum.dart';
+import 'package:custom_sliver/custom_sliver_refresh.dart';
+import 'package:custom_sliver/news_nested_refresh_indicator.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as HSY;
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 typedef HSYCustomSliverScrollChanged = void Function(
     HYSCustomSliverScrollStatus status, num offsets);
@@ -52,6 +55,7 @@ class HSYCustomSliverView extends StatefulWidget {
 
 class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
   ScrollController _scrollController;
+  RefreshController _refreshController;
 
   @override
   void initState() {
@@ -75,6 +79,7 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
               );
         }
       });
+    _refreshController = RefreshController();
   }
 
   @override
@@ -82,6 +87,7 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
     // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
+    _refreshController.dispose();
   }
 
   @override
@@ -124,8 +130,9 @@ class _HSYCustomSliverViewState extends State<HSYCustomSliverView> {
     if (this.widget.onRefresh == null) {
       return nestedScrollView;
     }
-    return HSY.NestedScrollViewRefreshIndicator(
+    return HSYNestedScrollViewRefreshIndicator(
       onRefresh: this.widget.onRefresh,
+      refreshHeader: HSYCustomSliverHeaderRefresh(),
       child: nestedScrollView,
     );
   }

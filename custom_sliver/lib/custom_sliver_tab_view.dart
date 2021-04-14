@@ -254,15 +254,6 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
     this.widget.onRefresh(
       pages,
       (HSYSliverRefreshResult result) {
-        switch (result) {
-          case HSYSliverRefreshResult.Failure:
-            _refreshControllers[pages].refreshFailed();
-            break;
-          case HSYSliverRefreshResult.Completed:
-          case HSYSliverRefreshResult.NotData:
-            _refreshControllers[pages].refreshCompleted();
-            break;
-        }
         streamController.sink.add(result);
         streamController.close();
       },
