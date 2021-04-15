@@ -20,6 +20,8 @@ pull_to_refresh: ^1.5.7
 
 使用请见example/main.dart的范例代码
 
+``` 
+
 HSYCustomSliverTabView(
         customSliverConfigs: _sliverConfigs,
         openUpRefreshs: _sliverConfigs.pagesDatas
@@ -109,3 +111,5 @@ HSYCustomSliverTabView(
           ),
         ],
       )
+
+```
