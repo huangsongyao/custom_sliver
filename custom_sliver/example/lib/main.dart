@@ -61,12 +61,30 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
     super.initState();
 
     _configs = [
-      HSYCustomTabBarItemConfigs(text: '已入金'),
-      HSYCustomTabBarItemConfigs(text: '已注册'),
-      HSYCustomTabBarItemConfigs(text: '已交易'),
-      HSYCustomTabBarItemConfigs(text: '已认证'),
-      HSYCustomTabBarItemConfigs(text: '已理财'),
-      HSYCustomTabBarItemConfigs(text: '已登录')
+      HSYCustomTabBarItemConfigs(
+        text: '已入金',
+        horizontals: 16.0,
+      ),
+      HSYCustomTabBarItemConfigs(
+        text: '已注册',
+        horizontals: 16.0,
+      ),
+      HSYCustomTabBarItemConfigs(
+        text: '已交易',
+        horizontals: 16.0,
+      ),
+      HSYCustomTabBarItemConfigs(
+        text: '已认证',
+        horizontals: 16.0,
+      ),
+      HSYCustomTabBarItemConfigs(
+        text: '已理财',
+        horizontals: 16.0,
+      ),
+      HSYCustomTabBarItemConfigs(
+        text: '已登录',
+        horizontals: 16.0,
+      )
     ];
     _tabController = TabController(
       length: _configs.length,
@@ -81,6 +99,7 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
         itemConfigs: _configs,
         indicatorConfig:
             HSYCustomTabBarIndicatorConfig.indicator3(Size(24.0, 2.0)),
+        tabPadding: EdgeInsets.symmetric(horizontal: 8.0),
       ),
       tabPageDatas: _configs.map((tab) {
         return HSYCustomSliverDatas(

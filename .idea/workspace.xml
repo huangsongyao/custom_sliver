@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a3ef0852-8843-4489-bc96-2abb05d3215b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/custom_sliver.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_sliver/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/custom_sliver/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_sliver/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/custom_sliver/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/custom_sliver/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_sliver/pubspec.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[RFCN30A69DN]" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1sNNHnrd0nX5EbdoNIiQnZsl0Nd" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="settings.editor.selected.configurable" value="flutter.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/custom_sliver/example/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a3ef0852-8843-4489-bc96-2abb05d3215b" name="Default Changelist" comment="" />
+      <created>1620709001696</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1620709001696</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1179" y="-867" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620709044187">
+      <screen x="755" y="-1057" width="1920" height="1057" />
+    </state>
+    <state x="1179" y="-867" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1165.-1057.1920.1057/0.23.1792.1028/755.-1057.1920.1057@755.-1057.1920.1057" timestamp="1620709044187" />
+    <state x="1452" y="-732" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1620709036248">
+      <screen x="755" y="-1057" width="1920" height="1057" />
+    </state>
+    <state x="1452" y="-732" key="#com.intellij.ide.util.TreeFileChooserDialog/-1165.-1057.1920.1057/0.23.1792.1028/755.-1057.1920.1057@755.-1057.1920.1057" timestamp="1620709036248" />
+    <state x="1216" y="-890" key="SettingsEditor" timestamp="1620709042906">
+      <screen x="755" y="-1057" width="1920" height="1057" />
+    </state>
+    <state x="1216" y="-890" key="SettingsEditor/-1165.-1057.1920.1057/0.23.1792.1028/755.-1057.1920.1057@755.-1057.1920.1057" timestamp="1620709042906" />
+  </component>
+</project>
