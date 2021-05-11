@@ -175,6 +175,9 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
             child: Text('$index-$item'),
           );
         },
+        onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs, bool isClickedTabBar, bool toChangedOthers) {
+          print('00000000000:::::::isClickedTabBar:$isClickedTabBar-------------::::::::toChangedOthers:$toChangedOthers');
+        },
         sliverHeaders: [
           Container(
             color: Colors.black,

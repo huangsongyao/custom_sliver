@@ -19,7 +19,10 @@ typedef HSYCustomSliverRefreshResult = void Function(
 typedef HSYCustomSliverRefresh = void Function(
     int pages, HSYCustomSliverRefreshResult result);
 typedef HSYCustomNestedTabChanged = void Function(
-    int index, HSYCustomTabBarItemConfigs itemConfigs, bool isClickedTabBar);
+    int index,
+    HSYCustomTabBarItemConfigs itemConfigs,
+    bool isClickedTabBar,
+    bool toChangedOthers);
 
 const String _HSYCustomSliverKeyPrefix = 'HSYCustomSliverKeyPrefix';
 
@@ -140,18 +143,20 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
       initialIndex: _selectedIndex,
       length: this.widget.customSliverConfigs.pagesDatas.length,
       vsync: this,
-    )..addListener(() {
-        _selectedIndex = _tabController.index;
-        _onChangedPage(
-          _selectedIndex,
-          this
-              .widget
-              .customSliverConfigs
-              .tabBarConfigs
-              .tabBarItemConfigs[_selectedIndex],
-          false,
-        );
-      });
+    )..addListener(
+        () {
+          _selectedIndex = _tabController.index;
+          _onChangedPage(
+            index: _selectedIndex,
+            itemConfigs: this
+                .widget
+                .customSliverConfigs
+                .tabBarConfigs
+                .tabBarItemConfigs[_selectedIndex],
+            isClickedTabBar: false,
+          );
+        },
+      );
     _positionKeys = this.widget.customSliverConfigs.pagesDatas.map((tabData) {
       return Key(
           '$_HSYCustomSliverKeyPrefix.${this.widget.customSliverConfigs.pagesDatas.indexOf(tabData)}');
@@ -186,16 +191,19 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
           children: [
             (this.widget.tabHeader ?? Container()),
             HSYCustomTabBar(
+              delayedListener: false,
               initTabBarConfigs: this.widget.customSliverConfigs.tabBarConfigs,
               backgroundDecoration: this.widget.tabBarBackground,
               tabHeights: this.widget.tabHeights,
               initSelectedIndex: _selectedIndex,
               tabController: _tabController,
-              onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
+              onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs,
+                  bool toChangedOthers) {
                 _selectedIndex = _tabController.index;
                 _onChangedPage(
-                  index,
-                  itemConfigs,
+                  index: index,
+                  itemConfigs: itemConfigs,
+                  toChangedOthers: toChangedOthers,
                 );
               },
             ),
@@ -299,16 +307,18 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
     );
   }
 
-  void _onChangedPage(
-    int index,
-    HSYCustomTabBarItemConfigs itemConfigs, [
+  void _onChangedPage({
+    @required int index,
+    @required HSYCustomTabBarItemConfigs itemConfigs,
     bool isClickedTabBar = true,
-  ]) {
+    bool toChangedOthers = false,
+  }) {
     if (this.widget.onChanged != null) {
       this.widget.onChanged(
             index,
             itemConfigs,
             isClickedTabBar,
+            toChangedOthers,
           );
     }
   }

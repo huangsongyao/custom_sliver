@@ -56,14 +56,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.8"
+    version: "0.0.9"
   custom_tab_bar:
     dependency: transitive
     description:
       name: custom_tab_bar
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.4"
+    version: "0.1.6"
   extended_nested_scroll_view:
     dependency: transitive
     description:
