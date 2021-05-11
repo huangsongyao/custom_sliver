@@ -63,8 +63,17 @@ class HSYCustomSliverTabView extends StatefulWidget {
   /// 是否添加上拉加载更多，这个是一个外部控制的bool集合，元素对应了每个page
   final List<bool> openUpRefreshs;
 
+  /// 整个悬浮Bar的高度，这个高度包含了[tabHeights]+[tabHeader]+[tabFooter]的高度
+  final double sliverTabBarHeights;
+
   /// TabBar的高度，默认为kToolbarHeight
   final double tabHeights;
+
+  /// Tabbar的头部部件
+  final Widget tabHeader;
+
+  /// Tabbar的底部部件
+  final Widget tabFooter;
 
   /// page为空数据时的占位小部件
   final Widget empty;
@@ -80,11 +89,14 @@ class HSYCustomSliverTabView extends StatefulWidget {
     this.sliverHeaders,
     this.refreshHeader,
     this.refreshFooter,
+    this.sliverTabBarHeights,
     this.onSliverChanged,
     this.onChanged,
     this.onBuilder,
     this.onRefresh,
     this.onLoading,
+    this.tabHeader,
+    this.tabFooter,
     this.empty,
   }) : super(key: key);
 
@@ -167,24 +179,29 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
         return positionKeys[_selectedIndex];
       },
       sliverHeaders: (this.widget.sliverHeaders ?? Container()),
-      persistentHeaderHeights: this.widget.tabHeights,
-      persistentHeader: Column(
-        children: [
-          HSYCustomTabBar(
-            initTabBarConfigs: this.widget.customSliverConfigs.tabBarConfigs,
-            backgroundDecoration: this.widget.tabBarBackground,
-            tabHeights: this.widget.tabHeights,
-            initSelectedIndex: _selectedIndex,
-            tabController: _tabController,
-            onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
-              _selectedIndex = _tabController.index;
-              _onChangedPage(
-                index,
-                itemConfigs,
-              );
-            },
-          )
-        ],
+      persistentHeaderHeights: (this.widget.sliverTabBarHeights ??
+          (this.widget.tabHeights ?? kToolbarHeight)),
+      persistentHeader: Container(
+        child: Column(
+          children: [
+            (this.widget.tabHeader ?? Container()),
+            HSYCustomTabBar(
+              initTabBarConfigs: this.widget.customSliverConfigs.tabBarConfigs,
+              backgroundDecoration: this.widget.tabBarBackground,
+              tabHeights: this.widget.tabHeights,
+              initSelectedIndex: _selectedIndex,
+              tabController: _tabController,
+              onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs) {
+                _selectedIndex = _tabController.index;
+                _onChangedPage(
+                  index,
+                  itemConfigs,
+                );
+              },
+            ),
+            (this.widget.tabFooter ?? Container()),
+          ],
+        ),
       ),
       nestedBody: TabBarView(
         controller: _tabController,
@@ -201,12 +218,12 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
                           );
                     }).toList()
                   : [])
-              : (this.widget.empty ??
-                  [
-                    HSYCustomSliverEmpty(
-                      reqResult: HSYSliverRefreshResult.NotData,
-                    ),
-                  ]));
+              : [
+                  (this.widget.empty ??
+                      HSYCustomSliverEmpty(
+                        reqResult: HSYSliverRefreshResult.NotData,
+                      )),
+                ]);
           if (HSYDevicesStatus.hasBottomsPadding(context)) {
             children.add(HSYIosBottomSafeWidget());
           }

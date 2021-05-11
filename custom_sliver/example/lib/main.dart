@@ -124,6 +124,14 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
             },
           );
         },
+        sliverTabBarHeights: 82,
+        tabHeader: Container(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Text('TabBar的头部'),
+          color: Colors.limeAccent,
+          width: MediaQuery.of(context).size.width,
+          height: (82 - kToolbarHeight),
+        ),
         openDownRefresh: true,
         onRefresh: (int pages, HSYCustomSliverRefreshResult result) {
           Future.delayed(
