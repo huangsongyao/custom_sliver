@@ -169,11 +169,11 @@ class _HSYCustomSliverTabViewState extends State<HSYCustomSliverTabView>
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _tabController.dispose();
     _refreshControllers.forEach((element) {
       element.dispose();
     });
+    super.dispose();
   }
 
   @override

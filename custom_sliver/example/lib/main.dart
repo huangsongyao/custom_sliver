@@ -32,7 +32,40 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TestCustomTabBar2(title: 'Flutter Demo Home Page'),
+      home: TestCustomTabBar(),
+    );
+  }
+}
+
+class TestCustomTabBar extends StatefulWidget {
+  @override
+  _TestCustomTabBarState createState() => _TestCustomTabBarState();
+}
+
+class _TestCustomTabBarState extends State<TestCustomTabBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: GestureDetector(
+        child: Container(
+          height: 100,
+          color: Colors.amber,
+          width: MediaQuery.of(context).size.width,
+          alignment: Alignment.center,
+          child: Text('push'),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return TestCustomTabBar2(
+                title: '自定义Sliver',
+              );
+            }),
+          );
+        },
+      ),
     );
   }
 }
@@ -175,8 +208,10 @@ class _TestCustomTabBar2State extends State<TestCustomTabBar2>
             child: Text('$index-$item'),
           );
         },
-        onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs, bool isClickedTabBar, bool toChangedOthers) {
-          print('00000000000:::::::isClickedTabBar:$isClickedTabBar-------------::::::::toChangedOthers:$toChangedOthers');
+        onChanged: (int index, HSYCustomTabBarItemConfigs itemConfigs,
+            bool isClickedTabBar, bool toChangedOthers) {
+          print(
+              '00000000000:::::::isClickedTabBar:$isClickedTabBar-------------::::::::toChangedOthers:$toChangedOthers');
         },
         sliverHeaders: [
           Container(
