@@ -19,16 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3ef0852-8843-4489-bc96-2abb05d3215b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/custom_sliver.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_sliver/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/custom_sliver/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_sliver/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/custom_sliver/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom_sliver/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/custom_sliver/pubspec.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="a3ef0852-8843-4489-bc96-2abb05d3215b" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -81,6 +72,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="1179" y="-867" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620709044187">
